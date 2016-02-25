@@ -4,11 +4,10 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "levins_centrala")
-public class Employee implements ContactRecord{
+public class Employee implements ContactRecord {
 
 	@Id
 	private Integer id;
-	// private Long id = System.currentTimeMillis();
 
 	@Column(name = "employees")
 	private String name;

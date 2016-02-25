@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaQuery;
 
 public class Demo {
 
@@ -23,11 +24,18 @@ public class Demo {
 
 			// entitymanager.getTransaction().begin();
 
-			Query query = entitymanager.createQuery("SELECT m FROM com.levins.my.contact.Employee m");
+			// Object className = "Employee";
+			// Object column = "name";
+			// Object searchValue = "ФИНАНСОВО СЧЕТОВОДНА";
+			String qlString = String.format("SELECT m FROM Employee m");
+
+			// CriteriaQuery<ContactRecord>q=entitymanager.createQuery(CriteriaQuery.class);
+
+			Query query = entitymanager.createQuery(qlString);
 			List<Employee> resultList = query.getResultList();
 
 			for (Employee m : resultList) {
-				System.out.println(m.getName());
+				System.out.println(m.toString());
 			}
 
 			entitymanager.close();
@@ -37,5 +45,4 @@ public class Demo {
 		}
 
 	}
-
 }

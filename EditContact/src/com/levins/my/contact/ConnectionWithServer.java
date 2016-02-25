@@ -10,39 +10,44 @@ import javax.persistence.Query;
 public class ConnectionWithServer<T> {
 
 	private EntityManagerFactory factory;
-	private EntityManager entitymanager;
+	private EntityManager entityManager;
 
 	public ConnectionWithServer(String persistenceName) {
 		this.factory = Persistence.createEntityManagerFactory(persistenceName);
-		this.entitymanager = factory.createEntityManager();
+		this.entityManager = factory.createEntityManager();
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<T> getAllrecords(String className)
 			throws ClassNotFoundException {
 		String qlString = String.format("SELECT m FROM %s m", className);
-		Query query = entitymanager.createQuery(qlString);
+		Query query = entityManager.createQuery(qlString);
 		List<T> resultList = query.getResultList();
 		return resultList;
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<T> getAllDepartment(String className)
-			throws ClassNotFoundException {
-		String qlString = String.format("SELECT m FROM %s m", className);
-		Query query = entitymanager.createQuery(qlString);
+	public List<T> getAllGroup(String className, String column,
+			String searchValue) throws ClassNotFoundException {
+		String qlString = String.format(
+				"SELECT m FROM %s m WHERE m.%s like '%s'", className, column,
+				searchValue);
+		Query query = entityManager.createQuery(qlString);
 
 		List<T> resultList = query.getResultList();
 		return resultList;
 	}
 
 	public static void main(String[] args) throws ClassNotFoundException {
-		ConnectionWithServer<Agent> a = new ConnectionWithServer<Agent>("contact");
+		ConnectionWithServer<ContactRecord> a = new ConnectionWithServer<ContactRecord>(
+				"contact");
 
-		List<Agent> allrecords = a.getAllrecords("Employee");
-		for (ContactRecord record : allrecords) {
-			System.out.println(record);
+		List<ContactRecord> allGroup = a.getAllGroup("Employee", "name","ФИНАНСОВО СЧЕТОВОДНА");
+		System.out.println(allGroup.size());
+		for (ContactRecord contactRecord : allGroup) {
+			System.out.println(contactRecord.getName());
 		}
+
 	}
 
 }
