@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 
 public class Demo {
@@ -22,15 +23,18 @@ public class Demo {
 
 			EntityManager entitymanager = factory.createEntityManager();
 
-			// entitymanager.getTransaction().begin();
+			CriteriaBuilder cb = entitymanager.getCriteriaBuilder();
+			/**
+			 * http://www.tutorialspoint.com/jpa/jpa_criteria_api.htm
+			 */
+			// CriteriaQuery<Entity class> cq = cb.createQuery(Entity.class);
+			// Root<Entity> from = cq.from(Entity.class);
+			//
+			// cq.select(Entity);
+			// TypedQuery<Entity> q = em.createQuery(cq);
+			// List<Entity> allitems = q.getResultList();
 
-			// Object className = "Employee";
-			// Object column = "name";
-			// Object searchValue = "ФИНАНСОВО СЧЕТОВОДНА";
-			String qlString = String.format("SELECT m FROM Employee m");
-
-			// CriteriaQuery<ContactRecord>q=entitymanager.createQuery(CriteriaQuery.class);
-
+			String qlString = null;
 			Query query = entitymanager.createQuery(qlString);
 			List<Employee> resultList = query.getResultList();
 
