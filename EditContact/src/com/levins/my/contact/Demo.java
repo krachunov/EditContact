@@ -16,51 +16,47 @@ public class Demo {
 				.setMaxResults(100).getResultList();
 	}
 
-	public static void main(String[] args) throws UnsupportedEncodingException {
+	public static List<ContactRecord> getAllGroup(String className,
+			String column, String searchValue) throws ClassNotFoundException {
+		EntityManagerFactory factory = Persistence
+				.createEntityManagerFactory("contact");
+		EntityManager entityManager = factory.createEntityManager();
+
+		String stringQuery = String.format(
+				"from %s s where (s.%s) like (:arg1)", className, column);
+		System.out.println(stringQuery);
+		Query query = entityManager.createQuery(stringQuery);
+		query.setParameter("arg1", searchValue);
+		List<ContactRecord> list = query.getResultList();
+
+		entityManager.close();
+		return list;
+	}
+
+	public static void main(String[] args) throws UnsupportedEncodingException,
+			ClassNotFoundException {
 		EntityManagerFactory factory = Persistence
 				.createEntityManagerFactory("contact");
 		try {
 
 			EntityManager entityManager = factory.createEntityManager();
-			CriteriaBuilder criteriaBuilder = entityManager
-					.getCriteriaBuilder();
-			CriteriaQuery<Object> criteriaQuery = criteriaBuilder.createQuery();
-			Root<Employee> from = (Root) criteriaQuery.from(Employee.class);
 
-			 //select all records
-//			   System.out.println("Select all records");
-//			   CriteriaQuery<Object> select = criteriaQuery.select(from);
-//			   TypedQuery<Object> typedQuery = entityManager.createQuery(select);
-//			   List<Object> resultlist = typedQuery.getResultList();
-//			   for(Object o:resultlist) {
-//				   Employee e = (Employee)o;
-//				   System.out.println("EID : " + e.getId() + " name : " + e.getName());
-//			   }
-
-			   
-			   String s = "Ириян Марков";
-			   Query query = entityManager.createQuery("from Employee s where (s.name) like (:arg1)");
-			   query.setParameter("arg1", s);
-			   List<Employee> list = query.getResultList();
-			   for (Employee employee : list) {
+			String s = "ПОИ";
+			String field = "department";
+//			String stringQuery = String.format(
+//					"from Employee s where (s.%s) like (:arg1)", field);
+//			 Query query = entityManager.createQuery(stringQuery);
+//			 query.setParameter("arg1", s);
+//			 List<ContactRecord> list = query.getResultList();
+//			 for (ContactRecord employee : list) {
+//			 System.out.println(employee);
+//			 }
+			
+			
+			List<ContactRecord> list = getAllGroup("Employee", field, s);
+			for (ContactRecord employee : list) {
 				System.out.println(employee);
 			}
-			   
-			
-			
-			   //Ordering the records 
-			// System.out.println("Select all records by follow ordering");
-			// CriteriaQuery<Object> select1 = criteriaQuery.select(from);
-			// select1.orderBy(criteriaBuilder.asc(from.get("name")));
-			// TypedQuery<Object> typedQuery1 =
-			// entityManager.createQuery(select);
-			// List<Object> resultlist1 = typedQuery1.getResultList();
-			//
-			// // for(Object o:resultlist1){
-			// // Employee e=(Employee)o;
-			// // System.out.println("EID : " + e.getId() + " Ename : " +
-			// e.getName());
-			// // }
 
 			entityManager.close();
 

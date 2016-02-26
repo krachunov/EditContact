@@ -27,25 +27,32 @@ public class ConnectionWithServer<T> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<T> getAllGroup(String className, String column,
+	public List<ContactRecord> getAllGroup(String className, String column,
 			String searchValue) throws ClassNotFoundException {
-		String qlString = String.format(
-				"SELECT m FROM %s m WHERE m.%s like '%s'", className, column,
-				searchValue);
-		Query query = entityManager.createQuery(qlString);
 
-		List<T> resultList = query.getResultList();
-		return resultList;
+		String stringQuery = String.format(
+				"from %s s where (s.%s) like (:arg1)", className, column);
+		Query query = entityManager.createQuery(stringQuery);
+		query.setParameter("arg1", searchValue);
+		List<ContactRecord> list = query.getResultList();
+
+		return list;
 	}
 
 	public static void main(String[] args) throws ClassNotFoundException {
 		ConnectionWithServer<ContactRecord> a = new ConnectionWithServer<ContactRecord>(
 				"contact");
 
-		List<ContactRecord> allGroup = a.getAllGroup("Employee", "name","ФИНАНСОВО СЧЕТОВОДНА");
+		String className = "Agent";
+		String column = "name";
+		String searchValue = "КЪРДЖАЛИ";
+		List<ContactRecord> allGroup = a.getAllGroup(className, column,
+				searchValue);
+
 		System.out.println(allGroup.size());
+
 		for (ContactRecord contactRecord : allGroup) {
-			System.out.println(contactRecord.getName());
+			System.out.println(contactRecord.toString());
 		}
 
 	}
