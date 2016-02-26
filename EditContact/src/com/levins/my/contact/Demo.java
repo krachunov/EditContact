@@ -1,13 +1,13 @@
 package com.levins.my.contact;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.Query;
+import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.ParameterExpression;
+import javax.persistence.criteria.Root;
 
 public class Demo {
 
@@ -16,33 +16,53 @@ public class Demo {
 				.setMaxResults(100).getResultList();
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws UnsupportedEncodingException {
 		EntityManagerFactory factory = Persistence
 				.createEntityManagerFactory("contact");
 		try {
 
-			EntityManager entitymanager = factory.createEntityManager();
+			EntityManager entityManager = factory.createEntityManager();
+			CriteriaBuilder criteriaBuilder = entityManager
+					.getCriteriaBuilder();
+			CriteriaQuery<Object> criteriaQuery = criteriaBuilder.createQuery();
+			Root<Employee> from = (Root) criteriaQuery.from(Employee.class);
 
-			CriteriaBuilder cb = entitymanager.getCriteriaBuilder();
-			/**
-			 * http://www.tutorialspoint.com/jpa/jpa_criteria_api.htm
-			 */
-			// CriteriaQuery<Entity class> cq = cb.createQuery(Entity.class);
-			// Root<Entity> from = cq.from(Entity.class);
-			//
-			// cq.select(Entity);
-			// TypedQuery<Entity> q = em.createQuery(cq);
-			// List<Entity> allitems = q.getResultList();
+			 //select all records
+//			   System.out.println("Select all records");
+//			   CriteriaQuery<Object> select = criteriaQuery.select(from);
+//			   TypedQuery<Object> typedQuery = entityManager.createQuery(select);
+//			   List<Object> resultlist = typedQuery.getResultList();
+//			   for(Object o:resultlist) {
+//				   Employee e = (Employee)o;
+//				   System.out.println("EID : " + e.getId() + " name : " + e.getName());
+//			   }
 
-			String qlString = null;
-			Query query = entitymanager.createQuery(qlString);
-			List<Employee> resultList = query.getResultList();
-
-			for (Employee m : resultList) {
-				System.out.println(m.toString());
+			   
+			   String s = "Ириян Марков";
+			   Query query = entityManager.createQuery("from Employee s where (s.name) like (:arg1)");
+			   query.setParameter("arg1", s);
+			   List<Employee> list = query.getResultList();
+			   for (Employee employee : list) {
+				System.out.println(employee);
 			}
+			   
+			
+			
+			   //Ordering the records 
+			// System.out.println("Select all records by follow ordering");
+			// CriteriaQuery<Object> select1 = criteriaQuery.select(from);
+			// select1.orderBy(criteriaBuilder.asc(from.get("name")));
+			// TypedQuery<Object> typedQuery1 =
+			// entityManager.createQuery(select);
+			// List<Object> resultlist1 = typedQuery1.getResultList();
+			//
+			// // for(Object o:resultlist1){
+			// // Employee e=(Employee)o;
+			// // System.out.println("EID : " + e.getId() + " Ename : " +
+			// e.getName());
+			// // }
 
-			entitymanager.close();
+			entityManager.close();
 
 		} finally {
 			factory.close();
