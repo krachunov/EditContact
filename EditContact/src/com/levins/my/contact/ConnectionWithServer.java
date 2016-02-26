@@ -27,7 +27,7 @@ public class ConnectionWithServer<T> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<ContactRecord> getAllGroup(String className, String column,
+	public List<ContactRecord> getAllWhere(String className, String column,
 			String searchValue) throws ClassNotFoundException {
 
 		String stringQuery = String.format(
@@ -39,22 +39,39 @@ public class ConnectionWithServer<T> {
 		return list;
 	}
 
+	@SuppressWarnings("unchecked")
+	public int deleteAllFrom(String className, String column, String searchValue)
+			throws ClassNotFoundException {
+
+		String stringQuery = String
+				.format("DELETE from %s s where (s.%s) like (:arg1)",
+						className, column);
+		entityManager.getTransaction().begin();
+		Query query = entityManager.createQuery(stringQuery);
+		int deletedCount = query.setParameter("arg1", searchValue)
+				.executeUpdate();
+		entityManager.getTransaction().commit();
+
+		return deletedCount;
+	}
+
 	public static void main(String[] args) throws ClassNotFoundException {
 		ConnectionWithServer<ContactRecord> a = new ConnectionWithServer<ContactRecord>(
 				"contact");
 
-		String className = "Agent";
-		String column = "name";
-		String searchValue = "КЪРДЖАЛИ";
-		List<ContactRecord> allGroup = a.getAllGroup(className, column,
-				searchValue);
+		String className = "Employee";
+		String column = "department";
+		String searchValue = "ПОИ";
+//		List<ContactRecord> allGroup = a.getAllWhere(className, column,searchValue);
+//
+//		System.out.println(allGroup.size());
+//		for (ContactRecord contactRecord : allGroup) {
+//			System.out.println(contactRecord.toString());
+//		}
 
-		System.out.println(allGroup.size());
-
-		for (ContactRecord contactRecord : allGroup) {
-			System.out.println(contactRecord.toString());
-		}
-
+		int deleteAllFrom = a.deleteAllFrom(className, column,searchValue);
+		System.out.println("DELETE ITEM "+deleteAllFrom);
+		
 	}
 
 }
