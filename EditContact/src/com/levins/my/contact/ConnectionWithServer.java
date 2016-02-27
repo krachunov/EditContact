@@ -27,8 +27,8 @@ public class ConnectionWithServer<T> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<ContactRecord> getAllWhere(String className, String column,
-			String searchValue) throws ClassNotFoundException {
+	public List<ContactRecord> getAllRecordsWhere(String className,
+			String column, String searchValue) throws ClassNotFoundException {
 
 		String stringQuery = String.format(
 				"from %s s where (s.%s) like (:arg1)", className, column);
@@ -40,8 +40,8 @@ public class ConnectionWithServer<T> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public int deleteAllFrom(String className, String column, String valueToDelete)
-			throws ClassNotFoundException {
+	public int deleteAllRecordsWhere(String className, String column,
+			String valueToDelete) throws ClassNotFoundException {
 
 		String stringQuery = String
 				.format("DELETE from %s s where (s.%s) like (:arg1)",
@@ -55,14 +55,37 @@ public class ConnectionWithServer<T> {
 		return deletedCount;
 	}
 
+	public void insertRecord(ContactRecord newRecord) {
+		entityManager.getTransaction().begin();
+		entityManager.persist(newRecord);
+		entityManager.getTransaction().commit();
+
+	}
+
 	public static void main(String[] args) throws ClassNotFoundException {
 		ConnectionWithServer<ContactRecord> a = new ConnectionWithServer<ContactRecord>(
 				"contact");
+		Employee rec = new Employee();
+		rec.setId(500);
+		rec.setName("Test testov");
+		rec.setPost("SuperHoer");
+		rec.setDepartment("");
+		rec.setDirector("Batman");
+		rec.setSector("specialist");
+		rec.setFloor(10);
+		rec.setInternal(321);
+		rec.setPhone("851117125");
+		rec.setGsm("123456789");
+		rec.setFax("");
+		rec.setEmail("krach@lev-ins.com");
+		rec.setUserName("krachunov");
+
+		a.insertRecord(rec);
 
 		String className = "Employee";
-		String column = "department";
-		String searchValue = "%";
-		List<ContactRecord> allGroup = a.getAllWhere(className, column,
+		String column = "name";
+		String searchValue = "Test testov";
+		List<ContactRecord> allGroup = a.getAllRecordsWhere(className, column,
 				searchValue);
 
 		System.out.println(allGroup.size());
@@ -70,7 +93,5 @@ public class ConnectionWithServer<T> {
 			System.out.println(contactRecord.toString());
 		}
 
-		
 	}
-
 }
