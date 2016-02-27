@@ -40,7 +40,7 @@ public class ConnectionWithServer<T> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public int deleteAllFrom(String className, String column, String searchValue)
+	public int deleteAllFrom(String className, String column, String valueToDelete)
 			throws ClassNotFoundException {
 
 		String stringQuery = String
@@ -48,7 +48,7 @@ public class ConnectionWithServer<T> {
 						className, column);
 		entityManager.getTransaction().begin();
 		Query query = entityManager.createQuery(stringQuery);
-		int deletedCount = query.setParameter("arg1", searchValue)
+		int deletedCount = query.setParameter("arg1", valueToDelete)
 				.executeUpdate();
 		entityManager.getTransaction().commit();
 
@@ -61,7 +61,7 @@ public class ConnectionWithServer<T> {
 
 		String className = "Employee";
 		String column = "department";
-		String searchValue = "ПОИ";
+		String searchValue = "РџРћР�";
 //		List<ContactRecord> allGroup = a.getAllWhere(className, column,searchValue);
 //
 //		System.out.println(allGroup.size());
