@@ -61,16 +61,15 @@ public class ConnectionWithServer<T> {
 
 		String className = "Employee";
 		String column = "department";
-		String searchValue = "РџРћР�";
-//		List<ContactRecord> allGroup = a.getAllWhere(className, column,searchValue);
-//
-//		System.out.println(allGroup.size());
-//		for (ContactRecord contactRecord : allGroup) {
-//			System.out.println(contactRecord.toString());
-//		}
+		String searchValue = "%";
+		List<ContactRecord> allGroup = a.getAllWhere(className, column,
+				searchValue);
 
-		int deleteAllFrom = a.deleteAllFrom(className, column,searchValue);
-		System.out.println("DELETE ITEM "+deleteAllFrom);
+		System.out.println(allGroup.size());
+		for (ContactRecord contactRecord : allGroup) {
+			System.out.println(contactRecord.toString());
+		}
+
 		
 	}
 
