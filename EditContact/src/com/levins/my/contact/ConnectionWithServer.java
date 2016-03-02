@@ -65,33 +65,13 @@ public class ConnectionWithServer<T> {
 	public static void main(String[] args) throws ClassNotFoundException {
 		ConnectionWithServer<ContactRecord> a = new ConnectionWithServer<ContactRecord>(
 				"contact");
-		Employee rec = new Employee();
-		rec.setId(500);
-		rec.setName("Test testov");
-		rec.setPost("SuperHoer");
-		rec.setDepartment("");
-		rec.setDirector("Batman");
-		rec.setSector("specialist");
-		rec.setFloor(10);
-		rec.setInternal(321);
-		rec.setPhone("851117125");
-		rec.setGsm("123456789");
-		rec.setFax("");
-		rec.setEmail("krach@lev-ins.com");
-		rec.setUserName("krachunov");
 
-		a.insertRecord(rec);
 
 		String className = "Employee";
 		String column = "name";
 		String searchValue = "Test testov";
 		List<ContactRecord> allGroup = a.getAllRecordsWhere(className, column,
 				searchValue);
-
-		System.out.println(allGroup.size());
-		for (ContactRecord contactRecord : allGroup) {
-			System.out.println(contactRecord.toString());
-		}
 
 	}
 }

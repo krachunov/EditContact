@@ -61,4 +61,10 @@ public class Agent implements ContactRecord{
 		return null;
 	}
 
+	@Override
+	public void setEmail(String newValue) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

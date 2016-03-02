@@ -12,4 +12,6 @@ public interface ContactRecord {
 
 	public abstract String toString();
 
+	public abstract void setEmail(String newValue);
+
 }
