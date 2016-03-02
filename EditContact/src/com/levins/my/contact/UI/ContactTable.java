@@ -31,7 +31,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-public class TableViewSample extends Application {
+public class ContactTable extends Application {
 
 	private TableView<ContactRecord> table = new TableView<ContactRecord>();
 
@@ -271,9 +271,5 @@ public class TableViewSample extends Application {
 
 		stage.setScene(scene);
 		stage.show();
-	}
-
-	public static void main(String[] args) {
-		launch(args);
 	}
 }
