@@ -1,13 +1,13 @@
 package com.levins.my.contact.UI;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.levins.my.contact.ConnectionWithServer;
 import com.levins.my.contact.ContactRecord;
 import com.levins.my.contact.Employee;
 
 import javafx.application.Application;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -15,7 +15,10 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
@@ -37,13 +40,14 @@ public class TableViewSample extends Application {
 
 	final HBox hb = new HBox();
 
-	@SuppressWarnings({ "unchecked", "unchecked" })
+	@SuppressWarnings({ "unchecked" })
 	@Override
 	public void start(Stage stage) throws ClassNotFoundException {
 
-		ConnectionWithServer<ContactRecord> a = new ConnectionWithServer<ContactRecord>(
+		ConnectionWithServer<ContactRecord> recordFromServer = new ConnectionWithServer<ContactRecord>(
 				"contact");
-		List<ContactRecord> allRecords = a.getAllrecords("Employee");
+		List<ContactRecord> allRecords = recordFromServer
+				.getAllrecords("Employee");
 		for (ContactRecord contactRecord : allRecords) {
 			data.add(contactRecord);
 		}
@@ -152,6 +156,20 @@ public class TableViewSample extends Application {
 		addButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
+				checkFieldIsEmpty(addName, addPosition, addDepart, addDirektor,
+						addInternal, addPhone, addEmail, addUser);
+
+				createnewRecord(recordFromServer, addName, addPosition,
+						addDepart, addDirektor, addInternal, addPhone,
+						addEmail, addUser);
+
+			}
+
+			private void createnewRecord(ConnectionWithServer<ContactRecord> a,
+					final TextField addName, final TextField addPosition,
+					final TextField addDepart, final TextField addDirektor,
+					final TextField addInternal, final TextField addPhone,
+					final TextField addEmail, final TextField addUser) {
 				Employee newEmployee = new Employee(addName.getText(),
 						addPosition.getText(), addDirektor.getText(), addDepart
 								.getText(), Integer.valueOf(addInternal
@@ -168,7 +186,42 @@ public class TableViewSample extends Application {
 				addPhone.clear();
 				addEmail.clear();
 				addUser.clear();
+			}
 
+			private void checkFieldIsEmpty(final TextField addName,
+					final TextField addPosition, final TextField addDepart,
+					final TextField addDirektor, final TextField addInternal,
+					final TextField addPhone, final TextField addEmail,
+					final TextField addUser) {
+				String regEx = "^\\s*$";
+
+				if (addName.getText().equals(regEx)) {
+					alertMessage(addName);
+				} else if (addPosition.getText().matches(regEx)) {
+					alertMessage(addPosition);
+				} else if (addDepart.getText().matches(regEx)) {
+					alertMessage(addDepart);
+				} else if (addDirektor.getText().matches(regEx)) {
+					alertMessage(addDirektor);
+				} else if (addInternal.getText().matches(regEx)) {
+					alertMessage(addInternal);
+				} else if (addPhone.getText().matches(regEx)) {
+					alertMessage(addPhone);
+				} else if (addEmail.getText().matches(regEx)) {
+					alertMessage(addEmail);
+				} else if (addUser.getText().matches(regEx)) {
+					alertMessage(addUser);
+				}
+			}
+
+			private void alertMessage(TextField field) {
+				String emptyField = field.getPromptText();
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("Error Dialog");
+				alert.setHeaderText("The field " + emptyField + " is empty");
+				alert.setContentText("Ooops, there was an error!");
+
+				alert.showAndWait();
 			}
 		});
 
@@ -176,25 +229,43 @@ public class TableViewSample extends Application {
 				addInternal, addPhone, addEmail, addUser, addButton);
 		hb.setSpacing(20);
 
-		
 		final Button removeButton = new Button("Remove");
-		addButton.setOnAction(new EventHandler<ActionEvent>() {
+		removeButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
 
+				Alert alert = new Alert(AlertType.CONFIRMATION);
+				alert.setTitle("Confirmation Dialog");
+				alert.setHeaderText("Delete record");
+				alert.setContentText("Do you realey want to delete?");
+
+				Optional<ButtonType> result = alert.showAndWait();
+				if (result.get() == ButtonType.OK) {
+
+					ContactRecord itemToRemove = table.getSelectionModel()
+							.getSelectedItem();
+					data.remove(itemToRemove);
+					try {
+						recordFromServer.deleteAllRecordsWhere("Employee",
+								"name", itemToRemove.getName());
+					} catch (ClassNotFoundException e1) {
+						e1.printStackTrace();
+					}
+				} else {
+					System.out.println("Ooops");
+				}
 
 			}
 		});
-		
+
 		final HBox hb2 = new HBox();
 		hb2.getChildren().addAll(removeButton);
 		hb2.scaleXProperty();
-		
+
 		final VBox vbox = new VBox();
 		vbox.setSpacing(5);
 		vbox.setPadding(new Insets(10, 0, 100, 10));
-		vbox.getChildren().addAll(label, table, hb,hb2);
-		vbox.getChildren().get(3).setLayoutX(1000);
+		vbox.getChildren().addAll(label, table, hb, hb2);
 
 		((Group) scene.getRoot()).getChildren().addAll(vbox);
 

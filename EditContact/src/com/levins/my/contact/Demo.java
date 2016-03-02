@@ -4,13 +4,10 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import javax.persistence.*;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.ParameterExpression;
-import javax.persistence.criteria.Root;
 
 public class Demo {
 
+	@SuppressWarnings("rawtypes")
 	public static List findAll(EntityManager entitymanager, String entityName) {
 		return entitymanager.createQuery("SELECT e FROM " + entityName + " e")
 				.setMaxResults(100).getResultList();
@@ -27,6 +24,7 @@ public class Demo {
 		System.out.println(stringQuery);
 		Query query = entityManager.createQuery(stringQuery);
 		query.setParameter("arg1", searchValue);
+		@SuppressWarnings("unchecked")
 		List<ContactRecord> list = query.getResultList();
 
 		entityManager.close();
@@ -35,34 +33,9 @@ public class Demo {
 
 	public static void main(String[] args) throws UnsupportedEncodingException,
 			ClassNotFoundException {
-		EntityManagerFactory factory = Persistence
-				.createEntityManagerFactory("contact");
-		try {
-
-			EntityManager entityManager = factory.createEntityManager();
-
-			String s = "ПОИ";
-			String field = "department";
-//			String stringQuery = String.format(
-//					"from Employee s where (s.%s) like (:arg1)", field);
-//			 Query query = entityManager.createQuery(stringQuery);
-//			 query.setParameter("arg1", s);
-//			 List<ContactRecord> list = query.getResultList();
-//			 for (ContactRecord employee : list) {
-//			 System.out.println(employee);
-//			 }
-			
-			
-			List<ContactRecord> list = getAllGroup("Employee", field, s);
-			for (ContactRecord employee : list) {
-				System.out.println(employee);
-			}
-
-			entityManager.close();
-
-		} finally {
-			factory.close();
-		}
+		String regEx = "^\\s*$";
+		String sp = "       ";
+		System.out.println(sp.matches(regEx));
 
 	}
 }
