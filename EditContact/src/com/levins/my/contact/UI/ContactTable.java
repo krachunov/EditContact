@@ -19,6 +19,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
@@ -39,18 +40,38 @@ public class ContactTable extends Application {
 			.observableArrayList();
 
 	final HBox hb = new HBox();
+	private ComboBox<?> comboBox;
+	private ConnectionWithServer<ContactRecord> recordFromServer;
+	private String tableType;
+	
 
 	@SuppressWarnings({ "unchecked" })
 	@Override
 	public void start(Stage stage) throws ClassNotFoundException {
 
-		ConnectionWithServer<ContactRecord> recordFromServer = new ConnectionWithServer<ContactRecord>(
-				"contact");
-		List<ContactRecord> allRecords = recordFromServer
-				.getAllrecords("Employee");
-		for (ContactRecord contactRecord : allRecords) {
-			data.add(contactRecord);
-		}
+		ObservableList<String> options = FXCollections.observableArrayList(
+				"Employee", "Agent");
+		comboBox = new ComboBox<String>(options);
+		comboBox.setPromptText("Choose which contact you want to edit");
+
+		recordFromServer = new ConnectionWithServer<ContactRecord>("contact");
+		comboBox.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				tableType = comboBox.getSelectionModel().getSelectedItem().toString();
+				List<ContactRecord> allRecords = null;
+				try {
+					allRecords = recordFromServer.getAllrecords(tableType);
+				} catch (ClassNotFoundException e1) {
+					e1.printStackTrace();
+				}
+				for (ContactRecord contactRecord : allRecords) {
+					data.add(contactRecord);
+				}
+			}
+		});
+
+	
 
 		Scene scene = new Scene(new Group());
 		stage.setTitle("Edit Contact");
@@ -159,13 +180,13 @@ public class ContactTable extends Application {
 				checkFieldIsEmpty(addName, addPosition, addDepart, addDirektor,
 						addInternal, addPhone, addEmail, addUser);
 
-				createnewRecord(recordFromServer, addName, addPosition,
+				createNewRecord(recordFromServer, addName, addPosition,
 						addDepart, addDirektor, addInternal, addPhone,
 						addEmail, addUser);
 
 			}
 
-			private void createnewRecord(ConnectionWithServer<ContactRecord> a,
+			private void createNewRecord(ConnectionWithServer<ContactRecord> a,
 					final TextField addName, final TextField addPosition,
 					final TextField addDepart, final TextField addDirektor,
 					final TextField addInternal, final TextField addPhone,
@@ -242,11 +263,10 @@ public class ContactTable extends Application {
 				Optional<ButtonType> result = alert.showAndWait();
 				if (result.get() == ButtonType.OK) {
 
-					ContactRecord itemToRemove = table.getSelectionModel()
-							.getSelectedItem();
+					ContactRecord itemToRemove = table.getSelectionModel().getSelectedItem();
 					data.remove(itemToRemove);
 					try {
-						recordFromServer.deleteAllRecordsWhere("Employee",
+						recordFromServer.deleteAllRecordsWhere(tableType,
 								"name", itemToRemove.getName());
 					} catch (ClassNotFoundException e1) {
 						e1.printStackTrace();
@@ -265,7 +285,8 @@ public class ContactTable extends Application {
 		final VBox vbox = new VBox();
 		vbox.setSpacing(5);
 		vbox.setPadding(new Insets(10, 0, 100, 10));
-		vbox.getChildren().addAll(label, table, hb, hb2);
+
+		vbox.getChildren().addAll(label, comboBox, table, hb, hb2);
 
 		((Group) scene.getRoot()).getChildren().addAll(vbox);
 
