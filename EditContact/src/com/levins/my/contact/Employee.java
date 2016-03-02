@@ -6,6 +6,39 @@ import javax.persistence.*;
 @Table(name = "levins_centrala")
 public class Employee implements ContactRecord {
 
+	public Employee() {
+
+	}
+
+	/**
+	 * 
+	 * @param name
+	 * @param post
+	 * @param director
+	 * @param department
+	 * @param internal
+	 * @param phone
+	 * @param email
+	 * @param userName
+	 */
+	public Employee(String name, String post, String director,
+			String department, Integer internal, String phone, String email,
+			String userName) {
+		this.id = (int) System.currentTimeMillis();
+		this.name = name;
+		this.post = post;
+		this.director = director;
+		this.department = department;
+		this.sector = "";
+		this.floor = 1;
+		this.internal = internal;
+		this.phone = phone;
+		this.gsm = "";
+		this.fax = "";
+		this.email = email;
+		this.userName = userName;
+	}
+
 	@Id
 	private Integer id;
 
@@ -44,9 +77,6 @@ public class Employee implements ContactRecord {
 
 	@Column(name = "user")
 	private String userName;
-
-	public Employee() {
-	}
 
 	public Integer getId() {
 		return id;
