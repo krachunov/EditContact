@@ -48,8 +48,7 @@ public class ContactTable extends Application {
 	@Override
 	public void start(Stage stage) throws ClassNotFoundException {
 
-		ObservableList<String> options = FXCollections.observableArrayList(
-				"Employee", "Agent");
+		ObservableList<String> options = FXCollections.observableArrayList("Employee", "Agent");
 		comboBox = new ComboBox<String>(options);
 		comboBox.setPromptText("Choose which contact you want to edit");
 
@@ -57,8 +56,7 @@ public class ContactTable extends Application {
 		comboBox.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				tableType = comboBox.getSelectionModel().getSelectedItem()
-						.toString();
+				tableType = comboBox.getSelectionModel().getSelectedItem().toString();
 				List<ContactRecord> allRecords = null;
 				try {
 					allRecords = recordFromServer.getAllrecords(tableType);
