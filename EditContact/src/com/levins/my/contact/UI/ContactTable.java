@@ -43,7 +43,6 @@ public class ContactTable extends Application {
 	private ComboBox<?> comboBox;
 	private ConnectionWithServer<ContactRecord> recordFromServer;
 	private String tableType;
-	
 
 	@SuppressWarnings({ "unchecked" })
 	@Override
@@ -58,7 +57,8 @@ public class ContactTable extends Application {
 		comboBox.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				tableType = comboBox.getSelectionModel().getSelectedItem().toString();
+				tableType = comboBox.getSelectionModel().getSelectedItem()
+						.toString();
 				List<ContactRecord> allRecords = null;
 				try {
 					allRecords = recordFromServer.getAllrecords(tableType);
@@ -71,8 +71,6 @@ public class ContactTable extends Application {
 			}
 		});
 
-	
-
 		Scene scene = new Scene(new Group());
 		stage.setTitle("Edit Contact");
 		stage.setWidth(1024);
@@ -83,50 +81,20 @@ public class ContactTable extends Application {
 
 		table.setEditable(true);
 
-		TableColumn<ContactRecord, String> firstNameCol = new TableColumn<ContactRecord, String>(
-				"Name");
-		firstNameCol.setMinWidth(150);
-		firstNameCol
-				.setCellValueFactory(new PropertyValueFactory<ContactRecord, String>(
-						"name"));
+		TableColumn<ContactRecord, String> firstNameCol = createColumn("Name","name",150);
 
-		TableColumn<ContactRecord, String> department = new TableColumn<ContactRecord, String>(
-				"department");
-		department.setMinWidth(200);
-		department
-				.setCellValueFactory(new PropertyValueFactory<ContactRecord, String>(
-						"department"));
+		TableColumn<ContactRecord, String> department = createColumn("Department","department",200);
+	
+		TableColumn<ContactRecord, String> director = createColumn("Director","director",150); 
+				
+		TableColumn<ContactRecord, String> post =createColumn("Post","post",100); 
+				
+		TableColumn<ContactRecord, String> internal=createColumn("Internal phone","internal",10);  
 
-		TableColumn<ContactRecord, String> director = new TableColumn<ContactRecord, String>(
-				"Director");
-		director.setMinWidth(150);
-		director.setCellValueFactory(new PropertyValueFactory<ContactRecord, String>(
-				"director"));
-
-		TableColumn<ContactRecord, String> post = new TableColumn<ContactRecord, String>(
-				"Post");
-		post.setMinWidth(100);
-		post.setCellValueFactory(new PropertyValueFactory<ContactRecord, String>(
-				"post"));
-
-		TableColumn<ContactRecord, String> internal = new TableColumn<ContactRecord, String>(
-				"Internal phone");
-		internal.setMinWidth(10);
-		internal.setCellValueFactory(new PropertyValueFactory<ContactRecord, String>(
-				"internal"));
-
-		TableColumn<ContactRecord, String> phone = new TableColumn<ContactRecord, String>(
-				"Phone");
-		phone.setMinWidth(100);
-		phone.setCellValueFactory(new PropertyValueFactory<ContactRecord, String>(
-				"phone"));
-
-		TableColumn<ContactRecord, String> emailCol = new TableColumn<ContactRecord, String>(
-				"Email");
-		emailCol.setMinWidth(200);
-		emailCol.setCellValueFactory(new PropertyValueFactory<ContactRecord, String>(
-				"email"));
-
+		TableColumn<ContactRecord, String> phone =createColumn("Phone","phone",100); 
+				
+		TableColumn<ContactRecord, String> emailCol = createColumn("Email","email",200);
+				
 		emailCol.setCellFactory(TextFieldTableCell.forTableColumn());
 		emailCol.setOnEditCommit(new EventHandler<CellEditEvent<ContactRecord, String>>() {
 			@Override
@@ -263,7 +231,8 @@ public class ContactTable extends Application {
 				Optional<ButtonType> result = alert.showAndWait();
 				if (result.get() == ButtonType.OK) {
 
-					ContactRecord itemToRemove = table.getSelectionModel().getSelectedItem();
+					ContactRecord itemToRemove = table.getSelectionModel()
+							.getSelectedItem();
 					data.remove(itemToRemove);
 					try {
 						recordFromServer.deleteAllRecordsWhere(tableType,
@@ -292,5 +261,16 @@ public class ContactTable extends Application {
 
 		stage.setScene(scene);
 		stage.show();
+	}
+
+	private TableColumn<ContactRecord, String> createColumn(String columnName,
+			String columnField, int size) {
+		TableColumn<ContactRecord, String> firstNameCol = new TableColumn<ContactRecord, String>(
+				columnName);
+		firstNameCol.setMinWidth(size);
+		firstNameCol
+				.setCellValueFactory(new PropertyValueFactory<ContactRecord, String>(
+						columnField));
+		return firstNameCol;
 	}
 }
