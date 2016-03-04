@@ -48,7 +48,8 @@ public class ContactTable extends Application {
 	@Override
 	public void start(Stage stage) throws ClassNotFoundException {
 
-		ObservableList<String> options = FXCollections.observableArrayList("Employee", "Agent");
+		ObservableList<String> options = FXCollections.observableArrayList(
+				"Employee", "Agent");
 		comboBox = new ComboBox<String>(options);
 		comboBox.setPromptText("Choose which contact you want to edit");
 
@@ -56,7 +57,8 @@ public class ContactTable extends Application {
 		comboBox.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				tableType = comboBox.getSelectionModel().getSelectedItem().toString();
+				tableType = comboBox.getSelectionModel().getSelectedItem()
+						.toString();
 				List<ContactRecord> allRecords = null;
 				try {
 					allRecords = recordFromServer.getAllrecords(tableType);
@@ -71,37 +73,38 @@ public class ContactTable extends Application {
 
 		Scene scene = new Scene(new Group());
 		stage.setTitle("Edit Contact");
-		stage.setWidth(1024);
-		stage.setHeight(960);
+		stage.setWidth(800);
+		stage.setHeight(600);
 
 		final Label label = new Label("Address Book");
 		label.setFont(new Font("Arial", 20));
 
 		table.setEditable(true);
 
-		TableColumn<ContactRecord, String> firstNameCol = createColumn("Name","name",150);
+		TableColumn<ContactRecord, String> firstNameCol = createColumn("Name",
+				"name", 150);
+		TableColumn<ContactRecord, String> department = createColumn(
+				"Department", "department", 200);
+		TableColumn<ContactRecord, String> director = createColumn("Director",
+				"director", 150);
+		TableColumn<ContactRecord, String> post = createColumn("Post", "post",
+				100);
+		TableColumn<ContactRecord, String> internal = createColumn(
+				"Internal phone", "internal", 10);
+		TableColumn<ContactRecord, String> phone = createColumn("Phone",
+				"phone", 100);
+		TableColumn<ContactRecord, String> emailCol = createColumn("Email",
+				"email", 200);
 
-		TableColumn<ContactRecord, String> department = createColumn("Department","department",200);
-	
-		TableColumn<ContactRecord, String> director = createColumn("Director","director",150); 
-				
-		TableColumn<ContactRecord, String> post =createColumn("Post","post",100); 
-				
-		TableColumn<ContactRecord, String> internal=createColumn("Internal phone","internal",10);  
-
-		TableColumn<ContactRecord, String> phone =createColumn("Phone","phone",100); 
-				
-		TableColumn<ContactRecord, String> emailCol = createColumn("Email","email",200);
-				
-		emailCol.setCellFactory(TextFieldTableCell.forTableColumn());
-		emailCol.setOnEditCommit(new EventHandler<CellEditEvent<ContactRecord, String>>() {
-			@Override
-			public void handle(CellEditEvent<ContactRecord, String> t) {
-				((ContactRecord) t.getTableView().getItems()
-						.get(t.getTablePosition().getRow())).setEmail(t
-						.getNewValue());
-			}
-		});
+		// emailCol.setCellFactory(TextFieldTableCell.forTableColumn());
+		// emailCol.setOnEditCommit(new
+		// EventHandler<CellEditEvent<ContactRecord, String>>() {
+		// @Override
+		// public void handle(CellEditEvent<ContactRecord, String> t) {
+		// ((ContactRecord)
+		// t.getTableView().getItems().get(t.getTablePosition().getRow())).setEmail(t.getNewValue());
+		// }
+		// });
 
 		table.setItems(data);
 		table.getColumns().addAll(firstNameCol, post, department, director,
@@ -112,23 +115,23 @@ public class ContactTable extends Application {
 		addName.setMaxWidth(firstNameCol.getPrefWidth());
 
 		final TextField addPosition = new TextField();
-		addPosition.setMaxWidth(phone.getPrefWidth());
+		addPosition.setMaxWidth(post.getPrefWidth());
 		addPosition.setPromptText("Position");
 
 		final TextField addDepart = new TextField();
-		addDepart.setMaxWidth(emailCol.getPrefWidth());
+		addDepart.setMaxWidth(department.getPrefWidth());
 		addDepart.setPromptText("Department");
 
 		final TextField addDirektor = new TextField();
-		addDirektor.setMaxWidth(emailCol.getPrefWidth());
+		addDirektor.setMaxWidth(director.getPrefWidth());
 		addDirektor.setPromptText("Direktor");
 
 		final TextField addInternal = new TextField();
-		addInternal.setMaxWidth(emailCol.getPrefWidth());
+		addInternal.setMaxWidth(internal.getPrefWidth());
 		addInternal.setPromptText("Internal");
 
 		final TextField addPhone = new TextField();
-		addPhone.setMaxWidth(emailCol.getPrefWidth());
+		addPhone.setMaxWidth(phone.getPrefWidth());
 		addPhone.setPromptText("Phone");
 
 		final TextField addEmail = new TextField();
