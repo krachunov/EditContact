@@ -44,6 +44,7 @@ public class ContactTable extends Application {
 	private ComboBox<?> comboBox;
 	private ConnectionWithServer<ContactRecord> recordFromServer;
 	private String tableType;
+	List<TextField> allField;
 
 	@SuppressWarnings({ "unchecked" })
 	@Override
@@ -111,7 +112,7 @@ public class ContactTable extends Application {
 		table.getColumns().addAll(firstNameCol, post, department, director,
 				internal, phone, emailCol);
 
-		List<TextField> allField = new ArrayList<TextField>();
+		allField = new ArrayList<TextField>();
 
 		final TextField addName = new TextField();
 		addName.setPromptText("Name");
@@ -157,11 +158,6 @@ public class ContactTable extends Application {
 		addButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				// TODO need change with list
-				// final boolean checkFieldIsEmpty = checkFieldIsEmpty(addName,
-				// addPosition, addDepart, addDirektor, addInternal,
-				// addPhone, addEmail, addUser);
-
 				final boolean checkFieldIsEmpty = checkFieldIsEmpty(allField);
 
 				if (checkFieldIsEmpty) {
@@ -191,56 +187,20 @@ public class ContactTable extends Application {
 				}
 			}
 
-			// TODO - needed every one of the field has valid data
 			private boolean checkFieldIsEmpty(
 					final List<TextField> listWithFields) {
 				boolean isEmpty = true;
 				String regEx = "^\\s*$";
 				for (TextField textField : listWithFields) {
-					System.out.println(textField.getText());
-					if (textField == null || textField.getText().equals(regEx)) {
+					final boolean equals = textField.getText().matches(regEx);
+					if (equals) {
+						System.out.println(textField.getText());
 						alertMessage(textField);
 						isEmpty = false;
 						break;
 					}
 				}
 				return isEmpty;
-			}
-
-			// TODO problem
-			private boolean checkFieldIsEmpty2(final TextField addName,
-					final TextField addPosition, final TextField addDepart,
-					final TextField addDirektor, final TextField addInternal,
-					final TextField addPhone, final TextField addEmail,
-					final TextField addUser) {
-				String regEx = "^\\s*$";
-
-				if (addName.getText().equals(regEx)) {
-					alertMessage(addName);
-					return false;
-				} else if (addPosition.getText().matches(regEx)) {
-					alertMessage(addPosition);
-					return false;
-				} else if (addDepart.getText().matches(regEx)) {
-					alertMessage(addDepart);
-					return false;
-				} else if (addDirektor.getText().matches(regEx)) {
-					alertMessage(addDirektor);
-					return false;
-				} else if (addInternal.getText().matches(regEx)) {
-					alertMessage(addInternal);
-					return false;
-				} else if (addPhone.getText().matches(regEx)) {
-					alertMessage(addPhone);
-					return false;
-				} else if (addEmail.getText().matches(regEx)) {
-					alertMessage(addEmail);
-					return false;
-				} else if (addUser.getText().matches(regEx)) {
-					alertMessage(addUser);
-					return false;
-				}
-				return true;
 			}
 
 			private void alertMessage(TextField field) {
