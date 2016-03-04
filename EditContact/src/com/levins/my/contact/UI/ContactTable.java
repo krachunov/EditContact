@@ -158,12 +158,11 @@ public class ContactTable extends Application {
 			@Override
 			public void handle(ActionEvent e) {
 				// TODO need change with list
-//				final boolean checkFieldIsEmpty = checkFieldIsEmpty(addName,
-//						addPosition, addDepart, addDirektor, addInternal,
-//						addPhone, addEmail, addUser);
+				// final boolean checkFieldIsEmpty = checkFieldIsEmpty(addName,
+				// addPosition, addDepart, addDirektor, addInternal,
+				// addPhone, addEmail, addUser);
 
-				 final boolean checkFieldIsEmpty =
-				 checkFieldIsEmpty(allField);
+				final boolean checkFieldIsEmpty = checkFieldIsEmpty(allField);
 
 				if (checkFieldIsEmpty) {
 					createNewRecord(recordFromServer, addName, addPosition,
@@ -194,18 +193,19 @@ public class ContactTable extends Application {
 
 			private boolean checkFieldIsEmpty(
 					final List<TextField> listWithFields) {
+				boolean isEmpty = false;
 				String regEx = "^\\s*$";
 				for (TextField textField : listWithFields) {
 					if (textField == null || textField.getText().equals(regEx)) {
 						alertMessage(textField);
-						return false;
+						isEmpty = true;
+						break;
 					}
-
-					return true;
 				}
-				return false;
+				return isEmpty;
 			}
 
+			// TODO problem
 			private boolean checkFieldIsEmpty2(final TextField addName,
 					final TextField addPosition, final TextField addDepart,
 					final TextField addDirektor, final TextField addInternal,
