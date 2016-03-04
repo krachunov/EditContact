@@ -1,5 +1,6 @@
 package com.levins.my.contact.UI;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -110,42 +111,53 @@ public class ContactTable extends Application {
 		table.getColumns().addAll(firstNameCol, post, department, director,
 				internal, phone, emailCol);
 
+		List<TextField> allField = new ArrayList<TextField>();
+
 		final TextField addName = new TextField();
 		addName.setPromptText("Name");
 		addName.setMaxWidth(firstNameCol.getPrefWidth());
+		allField.add(addName);
 
 		final TextField addPosition = new TextField();
 		addPosition.setMaxWidth(post.getPrefWidth());
 		addPosition.setPromptText("Position");
+		allField.add(addPosition);
 
 		final TextField addDepart = new TextField();
 		addDepart.setMaxWidth(department.getPrefWidth());
 		addDepart.setPromptText("Department");
+		allField.add(addDepart);
 
 		final TextField addDirektor = new TextField();
 		addDirektor.setMaxWidth(director.getPrefWidth());
 		addDirektor.setPromptText("Direktor");
+		allField.add(addDirektor);
 
 		final TextField addInternal = new TextField();
 		addInternal.setMaxWidth(internal.getPrefWidth());
 		addInternal.setPromptText("Internal");
+		allField.add(addInternal);
 
 		final TextField addPhone = new TextField();
 		addPhone.setMaxWidth(phone.getPrefWidth());
 		addPhone.setPromptText("Phone");
+		allField.add(addPhone);
 
 		final TextField addEmail = new TextField();
 		addEmail.setMaxWidth(emailCol.getPrefWidth());
 		addEmail.setPromptText("Email");
+		allField.add(addEmail);
 
 		final TextField addUser = new TextField();
 		addUser.setMaxWidth(emailCol.getPrefWidth());
 		addUser.setPromptText("User");
+		allField.add(addUser);
 
 		final Button addButton = new Button("Add");
 		addButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
+				//TODO need change with list 
 				checkFieldIsEmpty(addName, addPosition, addDepart, addDirektor,
 						addInternal, addPhone, addEmail, addUser);
 
@@ -168,14 +180,9 @@ public class ContactTable extends Application {
 				data.add(newEmployee);
 				a.insertRecord(newEmployee);
 
-				addName.clear();
-				addPosition.clear();
-				addDirektor.clear();
-				addDepart.clear();
-				addInternal.clear();
-				addPhone.clear();
-				addEmail.clear();
-				addUser.clear();
+				for (TextField textField : allField) {
+					textField.clear();
+				}
 			}
 
 			private void checkFieldIsEmpty(final TextField addName,
