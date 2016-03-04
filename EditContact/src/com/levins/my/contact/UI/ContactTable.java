@@ -191,14 +191,16 @@ public class ContactTable extends Application {
 				}
 			}
 
+			// TODO - needed every one of the field has valid data
 			private boolean checkFieldIsEmpty(
 					final List<TextField> listWithFields) {
-				boolean isEmpty = false;
+				boolean isEmpty = true;
 				String regEx = "^\\s*$";
 				for (TextField textField : listWithFields) {
+					System.out.println(textField.getText());
 					if (textField == null || textField.getText().equals(regEx)) {
 						alertMessage(textField);
-						isEmpty = true;
+						isEmpty = false;
 						break;
 					}
 				}
