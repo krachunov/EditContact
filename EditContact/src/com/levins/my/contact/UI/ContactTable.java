@@ -74,8 +74,8 @@ public class ContactTable extends Application {
 
 		Scene scene = new Scene(new Group());
 		stage.setTitle("Edit Contact");
-		stage.setWidth(800);
-		stage.setHeight(600);
+		stage.setWidth(900);
+		stage.setHeight(700);
 
 		final Label label = new Label("Address Book");
 		label.setFont(new Font("Arial", 20));
@@ -157,13 +157,20 @@ public class ContactTable extends Application {
 		addButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				//TODO need change with list 
-				checkFieldIsEmpty(addName, addPosition, addDepart, addDirektor,
-						addInternal, addPhone, addEmail, addUser);
+				// TODO need change with list
+//				final boolean checkFieldIsEmpty = checkFieldIsEmpty(addName,
+//						addPosition, addDepart, addDirektor, addInternal,
+//						addPhone, addEmail, addUser);
 
-				createNewRecord(recordFromServer, addName, addPosition,
-						addDepart, addDirektor, addInternal, addPhone,
-						addEmail, addUser);
+				 final boolean checkFieldIsEmpty =
+				 checkFieldIsEmpty(allField);
+
+				if (checkFieldIsEmpty) {
+					createNewRecord(recordFromServer, addName, addPosition,
+							addDepart, addDirektor, addInternal, addPhone,
+							addEmail, addUser);
+
+				}
 
 			}
 
@@ -185,7 +192,21 @@ public class ContactTable extends Application {
 				}
 			}
 
-			private void checkFieldIsEmpty(final TextField addName,
+			private boolean checkFieldIsEmpty(
+					final List<TextField> listWithFields) {
+				String regEx = "^\\s*$";
+				for (TextField textField : listWithFields) {
+					if (textField == null || textField.getText().equals(regEx)) {
+						alertMessage(textField);
+						return false;
+					}
+
+					return true;
+				}
+				return false;
+			}
+
+			private boolean checkFieldIsEmpty2(final TextField addName,
 					final TextField addPosition, final TextField addDepart,
 					final TextField addDirektor, final TextField addInternal,
 					final TextField addPhone, final TextField addEmail,
@@ -194,21 +215,30 @@ public class ContactTable extends Application {
 
 				if (addName.getText().equals(regEx)) {
 					alertMessage(addName);
+					return false;
 				} else if (addPosition.getText().matches(regEx)) {
 					alertMessage(addPosition);
+					return false;
 				} else if (addDepart.getText().matches(regEx)) {
 					alertMessage(addDepart);
+					return false;
 				} else if (addDirektor.getText().matches(regEx)) {
 					alertMessage(addDirektor);
+					return false;
 				} else if (addInternal.getText().matches(regEx)) {
 					alertMessage(addInternal);
+					return false;
 				} else if (addPhone.getText().matches(regEx)) {
 					alertMessage(addPhone);
+					return false;
 				} else if (addEmail.getText().matches(regEx)) {
 					alertMessage(addEmail);
+					return false;
 				} else if (addUser.getText().matches(regEx)) {
 					alertMessage(addUser);
+					return false;
 				}
+				return true;
 			}
 
 			private void alertMessage(TextField field) {
