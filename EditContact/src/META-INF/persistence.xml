@@ -16,7 +16,7 @@
 		<class>com.levins.my.contact.Agent</class>
 		<class>com.levins.my.contact.Employee</class>
 		<properties>
-			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://192.168.12.124:3306/drupal" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://192.168.12.24:3306/drupal" />
 			<property name="hibernate.hbm2ddl.auto" value="validate" />
 			<property name="javax.persistence.jdbc.user" value="drupal" />
 			<property name="javax.persistence.jdbc.password" value="dru_PAL" />
